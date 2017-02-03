@@ -76,6 +76,8 @@ ostream& operator<<(ostream& o, const Medecin& unMedecin)
 		<< " | " << AFFICHER_ESPACE(espace_horaires - std::to_string(unMedecin.horaires_).size()) << unMedecin.horaires_
 		<< AFFICHER_ESPACE(espace_horaires)
 		<< unMedecin.obtenirSpecialite() << endl; //Appel a l'operateur chevron de Specialite autto
+	  
+	  return o;
 }
 
 bool Medecin::operator==(const Medecin& unMedecin) 
