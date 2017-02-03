@@ -18,17 +18,39 @@ bool Personnel::ajouterMedecin(Medecin* medecin)
 	//return true;
 }
 
-bool Personnel::retirerMedecin(const std::string& nom)  
+bool Personnel::retirerMedecin(const std::string& nom)
 {
-	// A MODIFIER...
-	return false;
+	bool ok = false;
+
+	for (unsigned int i = 0; i < medecins_.size(); i++) {
+
+		if ((*medecins_[i]) == nom)
+		{
+			(*medecins_[i]) = (*medecins_[medecins_.size() - 1]);
+			//medecins_[i] = medecins_[medecins_.size() - 1];
+
+			medecins_.pop_back();
+			ok = true;
+		}
+	}
+	
+	return ok;
 }
 
-bool Personnel::ajouterInfirmier(Infirmier* infirmier) 
+bool Personnel::ajouterInfirmier(Infirmier* infirmier)
 {
-	
-	
-	//return true;
+
+	for (unsigned int i = 0; i < infirmiers_.size(); i++) {
+		
+		if ((*infirmiers_[i]) == (*infirmier))
+			return false;
+
+		else
+		{
+			infirmiers_.push_back(infirmier);
+			return true;
+		}
+	}
 }
 
 bool Personnel::retirerInfirmier(const std::string& nomComplet) 
