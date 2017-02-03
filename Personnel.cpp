@@ -5,6 +5,8 @@
 #include <iomanip>
 #include "Const.h"
 
+using namespace std;
+
 Personnel::Personnel() {}
 
 Personnel::~Personnel() {};
@@ -24,7 +26,7 @@ bool Personnel::ajouterMedecin(Medecin* medecin)
 
 }
 
-bool Personnel::retirerMedecin(const std::string& nom)
+bool Personnel::retirerMedecin(const string& nom)
 {
 	bool ok = false;
 
@@ -39,7 +41,7 @@ bool Personnel::retirerMedecin(const std::string& nom)
 			ok = true;
 		}
 	}
-	
+
 	return ok;
 }
 
@@ -47,7 +49,7 @@ bool Personnel::ajouterInfirmier(Infirmier* infirmier)
 {
 
 	for (unsigned int i = 0; i < infirmiers_.size(); i++) {
-		
+
 		if ((*infirmiers_[i]) == (*infirmier))
 			return false;
 
@@ -59,7 +61,7 @@ bool Personnel::ajouterInfirmier(Infirmier* infirmier)
 	}
 }
 
-bool Personnel::retirerInfirmier(const std::string& nomComplet) 
+bool Personnel::retirerInfirmier(const string& nomComplet) 
 {
 	for (unsigned i = 0; i < (infirmiers_).size(); i++)
 	{
@@ -75,14 +77,13 @@ bool Personnel::retirerInfirmier(const std::string& nomComplet)
 	}
 }
 	
-
-void Personnel::information() const // A MODIFIER...
+ostream& operator<< (ostream& os, const Personnel& personnel)
 {
-	personnel.afficherMedecins();
-	personnel.afficherInfirmiers();
+	personnel.afficherMedecins(os);
+	personnel.afficherInfirmiers(os);
 }
 
-void Personnel::afficherMedecins() const // A MODIFIER... (si necessaire)
+void Personnel::afficherMedecins(ostream & os) const // A MODIFIER... (si necessaire)
 {
 	string tabMed = "Tableau Medecins";
 	string nom = "Nom";
@@ -90,47 +91,71 @@ void Personnel::afficherMedecins() const // A MODIFIER... (si necessaire)
 	string domaine = "Domaine Specialite";
 	string niveau = "Niveau Specialite";
 
-	std::cout << AFFICHER_ESPACE(espacement_medecin / 2) << tabMed 
+	os << AFFICHER_ESPACE(espacement_medecin / 2) << tabMed 
 		<< AFFICHER_ESPACE(espacement_medecin / 2) << endl;
 
-	std::cout << AFFICHER_LINE(espacement_medecin + tabMed.size()) << endl;
+	os << AFFICHER_LINE(espacement_medecin + tabMed.size()) << endl;
 
-	std::cout << "| " << nom << AFFICHER_ESPACE(espace_nom - nom.size()) 
+	os << "| " << nom << AFFICHER_ESPACE(espace_nom - nom.size()) 
 		<< " | " << horaires << AFFICHER_ESPACE(2*espace_horaires - horaires.size())
 		<< " | " << domaine << AFFICHER_ESPACE(espace_domaine - domaine.size()) 
 		<< " | " << AFFICHER_ESPACE(espace_niveau - niveau.size() / 2) << niveau
 		<< AFFICHER_ESPACE(espace_niveau - niveau.size() / 2)
 		<< "| " << endl;
 		
-	std::cout << AFFICHER_LINE(espacement_medecin + tabMed.size()) << endl;
+	os << AFFICHER_LINE(espacement_medecin + tabMed.size()) << endl;
 	for (size_t i = 0; i < medecins_.size(); i++)
 	{	
-		medecins_[i]->information();
-		std::cout << endl;
+		os<<medecins_[i]<< endl;
 	}
-	std::cout << AFFICHER_LINE(espacement_medecin + tabMed.size()) << endl;
-	std::cout << AFFICHER_ESPACE(espacement_medecin + tabMed.size()) << endl;
+	os << AFFICHER_LINE(espacement_medecin + tabMed.size()) << endl;
+	os << AFFICHER_ESPACE(espacement_medecin + tabMed.size()) << endl;
 }
 
-void Personnel::afficherInfirmiers() const // A MODIFIER... (si necessaire)
+void Personnel::afficherInfirmiers(ostream & os) const // A MODIFIER... (si necessaire)
 {
 	string tabInf = "Tableau Infimiers";
 	string nomComplet = "Nom Complet";
 	string nbChambre = "Nombre de Chambre";
-	std::cout << AFFICHER_ESPACE(espacement_infirmier/2) << tabInf 
+	os << AFFICHER_ESPACE(espacement_infirmier/2) << tabInf 
 		<< AFFICHER_ESPACE(espacement_infirmier/2) << endl;
-	std::cout << AFFICHER_LINE(espacement_infirmier + tabInf.size()) << endl;
+	os << AFFICHER_LINE(espacement_infirmier + tabInf.size()) << endl;
 	
-	std::cout << "| " << nomComplet << AFFICHER_ESPACE(espace_nom - nomComplet.size())
+	os << "| " << nomComplet << AFFICHER_ESPACE(espace_nom - nomComplet.size())
 		 << " | " << nbChambre << AFFICHER_ESPACE(2 * espace_chambre - nbChambre.size())
 		 << " | " << endl;
-	std::cout << AFFICHER_LINE(espacement_infirmier + tabInf.size()) << endl;
+	os << AFFICHER_LINE(espacement_infirmier + tabInf.size()) << endl;
 
 	for (size_t i = 0; i < infirmiers_.size(); i++)
 	{
-		infirmiers_[i]->information()
-		std::cout << endl;
+		os<<infirmiers_[i]<< endl;
 	}
 
-	std::cout << AFFICHER_LINE(espacement_infirmier + tabInf.size());
+	os << AFFICHER_LINE(espacement_infirmier + tabInf.size());
 }
+
+// Opérateurs de surcharge
+Personnel& Personnel::operator+=(Medecin* medecin)
+{
+	(*this).ajouterMedecin(medecin); // Verifier si c'est vraiment nécessaire d'utiliser this
+	return *this;
+}
+
+Personnel& Personnel::operator-=(Medecin* medecin)
+{
+	(*this).retirerMedecin((*medecin).obtenirNom); // Verifier si c'est vraiment nécessaire d'utiliser this
+	return (*this);
+}
+
+Personnel& Personnel::operator+=(Infirmier* infirmier)
+{
+	(*this).ajouterInfirmier(infirmier); // Verifier si c'est vraiment nécessaire d'utiliser this
+	return *this;
+}
+
+Personnel& Personnel::operator-=(Infirmier* infirmier)
+{
+	(*this).retirerInfirmier((*infirmier).obtenirNomComplet); // Verifier si c'est vraiment nécessaire d'utiliser this
+	return (*this);
+}
+
