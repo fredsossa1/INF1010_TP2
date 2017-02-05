@@ -1,72 +1,121 @@
-/**************************************************
- * Main.cpp
- * Date: 31 janvier 2017
-**************************************************/
-
-#include <string>
+#include "Medecin.h"
 #include <iostream>
+#include <iomanip>
+#include "Const.h"
 
 using namespace std;
 
-int main()
+//Constructeur par parametre
+Medecin::Medecin(const string& nom) : nom_(nom), horaires_(0)
 {
-	// C'est a vous de voir si vous devez allouer dynamiquement ou non les elements
+}
 
-	//1-  Creez 11 objets du type Infirmier � l'aide du constructeur par param�tre avec des valeurs de votre choix
-	// A COMPLETER...
+Medecin::Medecin(const string& nom, int horaires, Specialite* specialite) : nom_(nom), horaires_(horaires), specialite_(specialite)
+{
+}
 
-	//2-  Creez deux objets du type Personnel � l'aide du constructeur par d�faut
-	// A COMPLETER...
+//Constructeur par copie
+Medecin::Medecin(const Medecin& unMedecin) : nom_(unMedecin.nom_), horaires_(unMedecin.horaires_), specialite_(nullptr)
+{
+	specialite_ = new Specialite(unMedecin.specialite_->obtenirDomaine(), unMedecin.specialite_->obtenirNiveau());
 
-	//3 - Creez deux objects de type Hopital qui vont prendre chacun en parametre le nom de l'hopital et le personnel assigné
-	// Hopital Sacré-Coeur de Montréal
-	// Hôpital Jean-Talon
-	// A COMPLETER...
+}
 
+//Destruceur
+Medecin::~Medecin()
+{
+	delete specialite_;
+}
 
-	//4-  Ajoutez les 6 objets du type Infimier � au personnel de l'Hôpital Sacré-Coeur de Montréal
-	// A COMPLETER...
+//Methodes d'acces
+string Medecin::obtenirNom() const
+{
+	return nom_;
+}
 
-	//5-  Ajoutez les 5 objets qui restent du type Infimier � au personnel de l'Hôpital Jean-Talon
-	// A COMPLETER...
-	
-	//6-  Creez 7 objets du type Specialite � l'aide du constructeur par param�tre avec des valeurs de votre choix
-	// Specialites : Chirurgie, Demartologie, Gastrologie, Sport, Podologie, Pediatrie, Psychiatrie
-	// A COMPLETER...
+int Medecin::obtenirHoraires() const
+{
+	return horaires_;
+}
 
-	//7- Creez 7 autres objets du type Medecin � l'aide du constructeur par param�tre avec des valeurs de votre choix
-	// Dr. Franc : en Chirurgie
-	// Dr. Sherlock : en Demartologie
-	// Dr. Holmes : en Gastrologie
-	// Dr. Jean : en Podologie
-	// Dr. Jules : en Pediatrie
-	// Dr. Kyle : en Sport
-	// Dr. House : en Psychiatrie
-	// A COMPLETER...
+Specialite Medecin::obtenirSpecialite() const
+{
+	return *specialite_;
+}
 
-	//8- Creer un autre medecin Sherlock en utilisant l'opérateur = et en utilisant le medecin existante Sherlock.
-	// Le horaire du deuxieme Sherlock devrai ensuite etre modifie pour une valeur differnte du premier Sherlock
-	// A COMPLETER...
+//Methodes de modification
+void Medecin::modifierNom(const string& nom)
+{
+	nom_ = nom;
+}
 
-	//9- Creer un autre medecin Holmes en utilisant le constructeur de copie et en utilisant le medecin existante Holmes.
-	// Le horaire du deuxieme Holmes devrai ensuite etre modifie pour une valeur differnte du premier Holmes
-	// A COMPLETER...
+void Medecin::modifierHoraires(int horaires)
+{
+	horaires_ = horaires;
+}
 
-	
-	//10- Ajoutez les medecins : parmis le personnel de l'hopital Sacré-Coeur : 
-	// Dr. Franc, Dr. Sherlock, Dr. Holmes, Dr. Jean, Dr. Jules
-	// A COMPLETER...
-	// Dr. Sherlock(2), Dr. Holmes(2), Dr. Kyle, Dr. House
-	// A COMPLETER...
-	
+void Medecin::modifierSpecialite(Specialite* specialite)
+{
+	specialite_ = specialite;
+}
 
+//Surcharge d'operateur
+Medecin Medecin::operator=(const Medecin& unMedecin)
+{
+	if (this != &unMedecin) {
 
-	//11- Retirer le medecin Jean et deux infirmiers de l'hopital Sacré-Coeur et ajouter les
-	// a l'hopital Jean-talon
+		delete specialite_;
 
+		specialite_ = new Specialite(*(unMedecin.specialite_));
+		nom_ = unMedecin.nom_;
+		horaires_ = unMedecin.horaires_;
 
-	//12- Faites afficher l'hopital Sacré-Coeur puis Jean-Talon
-	// A COMPLETER...
+	}
+	return (*this);
+}
 
-	return 0;
+ostream& operator<< (ostream& os, const Medecin& unMedecin)
+{
+	os << "| " << unMedecin.obtenirNom() << AFFICHER_ESPACE(espace_nom - unMedecin.obtenirNom().size())
+		<< " | " << AFFICHER_ESPACE(espace_horaires - std::to_string(unMedecin.obtenirHoraires()).size()) << unMedecin.obtenirHoraires()
+		<< AFFICHER_ESPACE(espace_horaires)
+		<< unMedecin.obtenirSpecialite() << endl; //Appel a l'operateur chevron de Specialite autto
+
+	return os;
+}
+
+bool Medecin::operator==(const Medecin& unMedecin)
+{
+	bool estEgal = true;
+
+	if (this != &unMedecin)
+	{
+		if ((*this).nom_ == unMedecin.nom_)
+			estEgal = true;
+
+		else estEgal = false;
+	}
+	return estEgal;
+}
+
+bool Medecin::operator==(const string& nom)
+{
+	bool estEgal = false;
+
+	if ((*this).nom_ == nom)
+	{
+		estEgal = true;
+	}
+	return estEgal;
+}
+
+bool operator==(const string& nom, const Medecin& unMedecin)
+{
+	bool estEgal = false;
+
+	if (nom == unMedecin.nom_)
+	{
+		estEgal = true;
+	}
+	return estEgal;
 }
