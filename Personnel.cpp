@@ -13,74 +13,75 @@ Personnel::~Personnel() {};
 	
 bool Personnel::ajouterMedecin(Medecin* medecin)  
 {
-	for (unsigned i = 0; i < (medecins_).size(); i++)
+	bool ok = true;
+
+	for (unsigned i = 0; i < medecins_.size(); i++)
 	{
-		if ((*medecins_[i]) == (*medecin))
-			return false;
-		else
-		{
-			medecins_.push_back(medecin);
-			return true;
-		}
+		if ((*medecins_[i]).obtenirNom() == (*medecin).obtenirNom())
+			ok = false;
 	}
 
-}
-
-bool Personnel::retirerMedecin(const string& nom)
-{
-	bool ok = false;
-
-	for (unsigned int i = 0; i < medecins_.size(); i++) {
-
-		if ((*medecins_[i]) == nom)
-		{
-			(*medecins_[i]) = (*medecins_[medecins_.size() - 1]);
-			//medecins_[i] = medecins_[medecins_.size() - 1];
-
-			medecins_.pop_back();
-			ok = true;
-		}
-	}
+	if (ok == true) medecins_.push_back(medecin);
 
 	return ok;
 }
 
-bool Personnel::ajouterInfirmier(Infirmier* infirmier)
+
+bool Personnel::retirerMedecin(const string& nom)
 {
+	for (unsigned int i = 0; i < medecins_.size(); i++) {
 
-	for (unsigned int i = 0; i < infirmiers_.size(); i++) {
-
-		if ((*infirmiers_[i]) == (*infirmier))
-			return false;
-
-		else
+		if ((*medecins_[i]).operator== (nom))
 		{
-			infirmiers_.push_back(infirmier);
+			//(*medecins_[i]) = (*medecins_[medecins_.size() - 1]);
+			medecins_[i] = medecins_[medecins_.size() - 1];
+
+			medecins_.pop_back();
 			return true;
 		}
 	}
+
+	return false;
+}
+
+bool Personnel::ajouterInfirmier(Infirmier* infirmier)
+{
+	bool ok = true;
+
+		for (unsigned int i = 0; i < infirmiers_.size(); i++) {
+
+			if ((*infirmiers_[i]).obtenirNom() == (*infirmier).obtenirNom())
+				ok = false;
+		}
+
+		if (ok == true) infirmiers_.push_back(infirmier);
+
+	return ok;
 }
 
 bool Personnel::retirerInfirmier(const string& nomComplet) 
 {
 	for (unsigned i = 0; i < (infirmiers_).size(); i++)
 	{
-		if ((*infirmiers_[i]) == nomComplet)
+		if ((*infirmiers_[i]).operator== (nomComplet))
 		{
-			(*infirmiers_[i]) = (*infirmiers_[infirmiers_.size()-1]);
-			//infirmiers_[i] = (infirmiers_[infirmiers_.size()]);
+			//(*infirmiers_[i]) = (*infirmiers_[infirmiers_.size()-1]);
+			infirmiers_[i] = (infirmiers_[infirmiers_.size()-1]);
+
 			infirmiers_.pop_back();
 			return true;
 		}
-		else
-			return false;
+	
 	}
+	return false;
 }
 	
+//Gestion de l'Affichage
 ostream& operator<< (ostream& os, const Personnel& personnel)
 {
 	personnel.afficherMedecins(os);
 	personnel.afficherInfirmiers(os);
+	return os;
 }
 
 void Personnel::afficherMedecins(ostream & os) const // A MODIFIER... (si necessaire)
@@ -106,7 +107,7 @@ void Personnel::afficherMedecins(ostream & os) const // A MODIFIER... (si necess
 	os << AFFICHER_LINE(espacement_medecin + tabMed.size()) << endl;
 	for (size_t i = 0; i < medecins_.size(); i++)
 	{	
-		os<<medecins_[i]<< endl;
+		os<<(*medecins_[i])<< endl;
 	}
 	os << AFFICHER_LINE(espacement_medecin + tabMed.size()) << endl;
 	os << AFFICHER_ESPACE(espacement_medecin + tabMed.size()) << endl;
@@ -128,7 +129,7 @@ void Personnel::afficherInfirmiers(ostream & os) const // A MODIFIER... (si nece
 
 	for (size_t i = 0; i < infirmiers_.size(); i++)
 	{
-		os<<infirmiers_[i]<< endl;
+		os<<(*infirmiers_[i])<< endl;
 	}
 
 	os << AFFICHER_LINE(espacement_infirmier + tabInf.size());
@@ -137,25 +138,34 @@ void Personnel::afficherInfirmiers(ostream & os) const // A MODIFIER... (si nece
 // Opérateurs de surcharge
 Personnel& Personnel::operator+=(Medecin* medecin)
 {
-	(*this).ajouterMedecin(medecin); // Verifier si c'est vraiment nécessaire d'utiliser this
+	if ((*this).ajouterMedecin(medecin)) 
+		cout << "Le medecin " << (*medecin).obtenirNom() << " a ete ajoute." << endl;
+	
 	return *this;
 }
 
 Personnel& Personnel::operator-=(Medecin* medecin)
 {
-	(*this).retirerMedecin((*medecin).obtenirNom); // Verifier si c'est vraiment nécessaire d'utiliser this
+	if ((*this).retirerMedecin((*medecin).obtenirNom()))
+		cout << "Le medecin " << (*medecin).obtenirNom() << " a ete retire." << endl;
+
 	return (*this);
 }
 
 Personnel& Personnel::operator+=(Infirmier* infirmier)
 {
-	(*this).ajouterInfirmier(infirmier); // Verifier si c'est vraiment nécessaire d'utiliser this
+		
+	if ((*this).ajouterInfirmier(infirmier)) 
+		cout << "L'infimier " << (*infirmier).obtenirNomComplet() << " a ete ajoute." << endl;
+	
 	return *this;
 }
 
 Personnel& Personnel::operator-=(Infirmier* infirmier)
 {
-	(*this).retirerInfirmier((*infirmier).obtenirNomComplet); // Verifier si c'est vraiment nécessaire d'utiliser this
+	if ((*this).retirerInfirmier((*infirmier).obtenirNomComplet()))
+		cout << "L'infimier " << (*infirmier).obtenirNomComplet() << " a ete retire." << endl;
+
 	return (*this);
 }
 
