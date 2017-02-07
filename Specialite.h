@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+using namespace std;
 
 class Specialite
 {
@@ -18,8 +19,8 @@ public:
 	void modifierNiveau(unsigned int niveau);
 
 	// _________TP2___________
-	friend ostream& operator<<(ostream& o, const Specialite& specialite) ; //Operateur << doivent etre en friend pour etre appeler en chaine
-	
+	friend ostream& operator<< (ostream& os, const Specialite& specialite); //Operateur << doivent etre en friend pour etre appeler en chaine
+
 private:
 	std::string domaine_;
 	unsigned int niveau_;
