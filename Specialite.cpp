@@ -8,11 +8,11 @@ using namespace std;
 
 Specialite::Specialite()
 {
-	domaine_= "";
-	niveau_= 0;
+	domaine_ = "";
+	niveau_ = 0;
 }
 
-Specialite::Specialite(const std::string & domaine, unsigned int niveau) : domaine_(domaine), niveau_(niveau) 
+Specialite::Specialite(const std::string & domaine, unsigned int niveau) : domaine_(domaine), niveau_(niveau)
 {
 }
 
@@ -37,11 +37,11 @@ void Specialite::modifierNiveau(unsigned int niveau)
 }
 
 
-ostream& operator<<(ostream& o, const Specialite& specialite) //quand appel fonction : parametre o prend cout automatiquement quand on appelle avec une spe par parametre
+ostream& operator<<(ostream& os, const Specialite& specialite) //quand appel fonction : parametre o prend cout automatiquement quand on appelle avec une spe par parametre
 {
-	o << " | " << specialite.obtenirDomaine() << AFFICHER_ESPACE(espace_domaine - specialite.obtenirDomaine().size())
-	  << " | " << AFFICHER_ESPACE(espace_niveau - std::to_string(specialite.obtenirNiveau()).size()) << specialite.obtenirNiveau()
-	  << AFFICHER_ESPACE(espace_niveau) << " | ";
+	os << " | " << specialite.obtenirDomaine() << AFFICHER_ESPACE(espace_domaine - specialite.obtenirDomaine().size())
+		<< " | " << AFFICHER_ESPACE(espace_niveau - std::to_string(specialite.obtenirNiveau()).size()) << specialite.obtenirNiveau()
+		<< AFFICHER_ESPACE(espace_niveau) << " | ";
 
-	return o;
+	return os;
 }
