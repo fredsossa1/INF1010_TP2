@@ -1,6 +1,8 @@
 #include "Infirmier.h"
 #include <iostream>
 #include <iomanip>
+#include <string>
+
 using namespace std;
 #include "Const.h"
 
@@ -16,6 +18,7 @@ Infirmier::Infirmier(const string & nom, const string & prenom, unsigned int nbC
 
 Infirmier::~Infirmier()
 {
+	
 }
 
 string Infirmier::obtenirNom() const
@@ -49,20 +52,20 @@ void Infirmier::modifierNbChambre(unsigned int nbChambre)
 }
 string Infirmier::obtenirNomComplet() const
 {
-	//Faire une concaténation dans un string séparé par un espace
+	//Faire une concatÃ©nation dans un string sÃ©parÃ© par un espace
 	string nomComplet = nom_ + " " + prenom_;
 	return nomComplet;
 }
 
-// Opérateurs de surchage
+// OpÃ©rateurs de surchage
 
  ostream& operator<< (ostream& os, const Infirmier& unInfirmier)
 {
-	os << "| " << unInfirmier.obtenirNomComplet() << AFFICHER_ESPACE(espace_nom - unInfirmier.obtenirNom().size());
-	os << " | " << AFFICHER_ESPACE(espace_chambre - to_string(unInfirmier.obtenirNbChambre).size() / 2);
-	os << unInfirmier.obtenirNbChambre << AFFICHER_ESPACE(espace_chambre);
+	os << "| " << unInfirmier.obtenirNomComplet() << AFFICHER_ESPACE(espace_nom - unInfirmier.obtenirNomComplet().size());
+	os << " | " << AFFICHER_ESPACE(espace_chambre - std::to_string(unInfirmier.nbChambre_).size() / 2);
+	os << unInfirmier.nbChambre_ << AFFICHER_ESPACE(espace_chambre);
 	os << "|" << endl;
-
+	return os;
 }
 
 
@@ -72,7 +75,7 @@ bool Infirmier::operator== (const Infirmier& unInfimier) const
 	{
 		bool estEgal = true;
 
-		if (obtenirNomComplet() == unInfimier.obtenirNomComplet)
+		if (obtenirNomComplet() == unInfimier.obtenirNomComplet())
 		{
 			return estEgal;
 		}
@@ -85,7 +88,7 @@ bool Infirmier::operator== (const Infirmier& unInfimier) const
 
 bool Infirmier::operator== (const string& nomComplet) const
 {
-	if ((*this).obtenirNomComplet == nomComplet)
+	if ((*this).obtenirNomComplet() == nomComplet)
 		return true;
 	else
 		return false;
@@ -101,7 +104,7 @@ bool Infirmier::operator== (const string& nomComplet) const
 
 bool operator== (const string& nomComplet, const Infirmier& unInfimier)
 {
-	if (unInfimier.obtenirNomComplet == nomComplet)
+	if (unInfimier.obtenirNomComplet() == nomComplet)
 		return true;
 	else
 		return false;
