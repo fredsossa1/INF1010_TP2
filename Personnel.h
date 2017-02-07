@@ -27,21 +27,13 @@ public:
 	Personnel& operator-=(Medecin* medecin);
 	Personnel& operator+=(Infirmier* infirmier);
 	Personnel& operator-=(Infirmier* infirmier);
+	friend ostream& operator<< (ostream& os, const Personnel& personnel);
 		
-	void information() const; // A MODIFIER... (si necessaire)
 	// _________TP2___________
 
-
-	//friend ostream& operator<< (ostream& os, const Infirmier& unInfimier);
-	//bool operator== (const Infirmier& unInfimier) const;
-	//bool operator== (const string& nomComplet) const;
-
-	//friend bool operator== (const string& nomComplet, const Infirmier& unInfimier);
-
-
 private:
-	void afficherInfirmiers() const; // A MODIFIER... (si necessaire)
-	void afficherMedecins() const; // A MODIFIER... (si necessaire)
+	void afficherInfirmiers(ostream & os) const;
+	void afficherMedecins(ostream & os) const;
 
 	// _________TP2___________
 	vector <Medecin*> medecins_;
