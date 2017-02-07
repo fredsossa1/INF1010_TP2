@@ -3,33 +3,35 @@
 
 #include <string>
 #include "Specialite.h"
+#include <iostream>
 
 using namespace std;
 
-class Medecin 
+class Medecin
 {
 public:
 
 	// Constructeurs par parametre et par copie :
+	Medecin(const string& nom);
 	Medecin(const string& nom, int horaires, Specialite* specialite);
-	Medecin(const Medecin& unMedecin); 
+	Medecin(const Medecin& unMedecin);
 
 	// Destructeur
-	~Medecin(); 
-	
+	~Medecin();
+
 	// Methodes d'acces
 	string obtenirNom() const;
 	int obtenirHoraires() const;
 	Specialite obtenirSpecialite() const;
-	
+
 	// Methodes de modification
 	void modifierNom(const string& nom);
 	void modifierHoraires(int horaires);
 	void modifierSpecialite(Specialite* specialite);
-	
+
 	//Surcharge d'operateur
 	Medecin operator= (const Medecin& unMedecin);
-	friend ostream& operator<<(ostream& o, const Medecin& unMedecin);
+	friend ostream& operator<< (ostream& os, const Medecin& unMedecin);
 	bool operator==(const Medecin& unMedecin);
 	bool operator==(const string& nom);
 	friend bool operator==(const string& nom, const Medecin& unMedecin);
@@ -41,7 +43,7 @@ private:
 	string nom_;
 	int horaires_;
 	Specialite* specialite_;
-	
+
 };
 
 #endif
