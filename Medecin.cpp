@@ -6,7 +6,11 @@
 using namespace std;
 
 //Constructeur par parametre
-Medecin::Medecin(const string& nom, int horaires, Specialite* specialite): nom_(nom), horaires_(horaires), specialite_(specialite)
+Medecin::Medecin(const string& nom) : nom_(nom), horaires_(0)
+{
+}
+
+Medecin::Medecin(const string& nom, int horaires, Specialite* specialite) : nom_(nom), horaires_(horaires), specialite_(specialite)
 {
 }
 
@@ -70,24 +74,24 @@ Medecin Medecin::operator=(const Medecin& unMedecin)
 	return (*this);
 }
 
-ostream& operator<<(ostream& o, const Medecin& unMedecin) 
+ostream& operator<< (ostream& os, const Medecin& unMedecin)
 {
-	  o << "| " << unMedecin.nom_ << AFFICHER_ESPACE(espace_nom - unMedecin.nom_.size())
-		<< " | " << AFFICHER_ESPACE(espace_horaires - std::to_string(unMedecin.horaires_).size()) << unMedecin.horaires_
+	os << "| " << unMedecin.obtenirNom() << AFFICHER_ESPACE(espace_nom - unMedecin.obtenirNom().size())
+		<< " | " << AFFICHER_ESPACE(espace_horaires - std::to_string(unMedecin.obtenirHoraires()).size()) << unMedecin.obtenirHoraires()
 		<< AFFICHER_ESPACE(espace_horaires)
 		<< unMedecin.obtenirSpecialite() << endl; //Appel a l'operateur chevron de Specialite autto
-	  
-	  return o;
+
+	return os;
 }
 
-bool Medecin::operator==(const Medecin& unMedecin) 
+bool Medecin::operator==(const Medecin& unMedecin)
 {
 	bool estEgal = true;
 
 	if (this != &unMedecin)
 	{
-		if ((*this).nom_ == unMedecin.nom_) 
-			 estEgal = true;
+		if ((*this).nom_ == unMedecin.nom_)
+			estEgal = true;
 
 		else estEgal = false;
 	}
@@ -100,7 +104,7 @@ bool Medecin::operator==(const string& nom)
 
 	if ((*this).nom_ == nom)
 	{
-			estEgal = true;
+		estEgal = true;
 	}
 	return estEgal;
 }
